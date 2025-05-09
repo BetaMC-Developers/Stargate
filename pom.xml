@@ -19,6 +19,10 @@
             <id>johnymuffin-nexus-releases</id>
             <url>https://repository.johnymuffin.com/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <build>
@@ -53,6 +57,18 @@
             <version>2.5</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/Permissions.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.earth2me.essentials</groupId>
+            <artifactId>essentials</artifactId>
+            <version>2.6.8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/essentials.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zavdav</groupId>
+            <artifactId>ZCore</artifactId>
+            <version>367d509</version>
         </dependency>
     </dependencies>
 

@@ -1,9 +1,7 @@
 package net.TheDgtl.Stargate;
 
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
-import com.nijikokun.register.Register;
 import com.nijikokun.register.payment.Method;
 import com.nijikokun.register.payment.Method.MethodAccount;
 import com.nijikokun.register.payment.Methods;
@@ -16,7 +14,8 @@ import com.nijikokun.register.payment.Methods;
 public class iConomyHandler {
 	public static String pName = "Stargate";
 	public static boolean useiConomy = false;
-	public static Register register = null;
+	private static Methods methods = new Methods();
+	public static Method method;
 	
 	public static int useCost = 0;
 	public static int createCost = 0;
@@ -26,12 +25,7 @@ public class iConomyHandler {
 	public static boolean freeGatesGreen = false;
 	
 	public static double getBalance(String player) {
-		if (useiConomy && register != null) {
-			Method method = Methods.getMethod();
-			if (method == null) {
-				return 0;
-			}
-			
+		if (useiConomy && method != null) {
 			MethodAccount acc = method.getAccount(player);
 			if (acc == null) {
 				Stargate.debug("ich::getBalance", "Error fetching Register account for " + player);
@@ -43,12 +37,7 @@ public class iConomyHandler {
 	}
 	
 	public static boolean chargePlayer(String player, String target, double amount) {
-		if (useiConomy && register != null) {
-			// Check for a payment method
-			Method method = Methods.getMethod();
-			if (method == null) {
-				return true;
-			}
+		if (useiConomy && method != null) {
 			// No point going from a player to themself
 			if (player.equals(target)) return true;
 			
@@ -73,36 +62,23 @@ public class iConomyHandler {
 	}
 	
 	public static boolean useiConomy() {
-		return (useiConomy && register != null && Methods.getMethod() != null);
+		return useiConomy && method != null;
 	}
 	
 	public static String format(int amt) {
-		Method method = Methods.getMethod();
-		if (method == null) {
-			return Integer.toString(amt);
-		}
 		return method.format(amt);
-	}
-	
-	public static boolean setupiConomy(PluginManager pm) {
-		if (!useiConomy) return false;
-		Plugin p = pm.getPlugin("Register");
-        return setupiConomy(p);
 	}
 	
 	public static boolean setupiConomy(Plugin p) {
 		if (!useiConomy) return false;
-		if (p == null || !p.isEnabled()) return false;
-		if (!p.getDescription().getName().equals("Register")) return false;
-		register = (Register)p;
-		return true;
-	}
-	
-	public static boolean checkLost(Plugin p) {
-		if (p.equals(register)) {
-			register = null;
+		if (methods.setMethod(p)) {
+			method = methods.getMethod();
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean checkLost(Plugin p) {
+		return methods.hasMethod() && methods.checkDisabled(p);
 	}
 }

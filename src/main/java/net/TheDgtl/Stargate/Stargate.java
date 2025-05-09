@@ -119,9 +119,6 @@ public class Stargate extends JavaPlugin {
 		
 		// Check to see if iConomy/Permissions is loaded yet.
 		permissions = (Permissions)checkPlugin("Permissions");
-		if (iConomyHandler.setupiConomy(pm)) {
-        	log.info("[Stargate] Register v" + iConomyHandler.register.getDescription().getVersion() + " found");
-        }
 		
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
@@ -998,7 +995,7 @@ public class Stargate extends JavaPlugin {
 		@Override
 		public void onPluginEnable(PluginEnableEvent event) {
 			if (iConomyHandler.setupiConomy(event.getPlugin())) {
-				log.info("[Stargate] Register v" + iConomyHandler.register.getDescription().getVersion() + " found");
+				log.info("[Stargate] Using " + iConomyHandler.method.getName() + " v" + iConomyHandler.method.getVersion() + " for economy");
 			}
 			if (permissions == null) {
 				if (event.getPlugin().getDescription().getName().equalsIgnoreCase("Permissions")) {
@@ -1010,7 +1007,7 @@ public class Stargate extends JavaPlugin {
 		@Override
 		public void onPluginDisable(PluginDisableEvent event) {
 			if (iConomyHandler.checkLost(event.getPlugin())) {
-				log.info("[Stargate] Register plugin lost.");
+				log.info("[Stargate] Economy method lost.");
 			}
 			if (event.getPlugin() == permissions) {
 				log.info("[Stargate] Permissions plugin lost.");
