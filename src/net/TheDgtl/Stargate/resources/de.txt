@@ -1,4 +1,3 @@
-author=EduardBaer
 prefix=[Stargate] 
 teleportMsg=Du wurdest Teleportiert.
 destroyMsg=Gate zerstört
@@ -21,8 +20,3 @@ createExists=Ein Gate mit diesem Name existiert bereits.
 createFull=Dieses Netzwerk ist voll.
 createWorldDeny=Du hast keinen Zugriff auf diese Welt.
 createConflict=Dieses Gate steht im Konflikt mit einem bereits existierenden.
-
-signRightClick=Right click
-signToUse=to use gate
-signRandom=Random
-signDisconnected=Disconnected

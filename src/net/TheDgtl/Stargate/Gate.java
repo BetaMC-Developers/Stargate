@@ -15,23 +15,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 /**
- * Stargate - A portal plugin for Bukkit
- * Copyright (C) 2011 Shaun (sturmeh)
- * Copyright (C) 2011 Dinnerbone
- * Copyright (C) 2011, 2012 Steven "Drakia" Scott <Contact@TheDgtl.net>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Gate.java
+ * @author Shaun (sturmeh)
+ * @author Dinnerbone
+ * @author Steven "Drakia" Scott
  */
  
 public class Gate {
@@ -61,7 +48,7 @@ public class Gate {
 	private int destroyCost = -1;
 	private boolean toOwner = false;
 
-	public Gate(String filename, Character[][] layout, HashMap<Character, Integer> types, HashMap<Character, Integer> metadata) {
+	private Gate(String filename, Character[][] layout, HashMap<Character, Integer> types, HashMap<Character, Integer> metadata) {
 		this.filename = filename;
 		this.layout = layout;
 		this.metadata = metadata;
@@ -175,14 +162,6 @@ public class Gate {
 	public Character[][] getLayout() {
 		return layout;
 	}
-	
-	public HashMap<Character, Integer> getTypes() {
-		return types;
-	}
-	
-	public HashMap<Character, Integer> getMetaData() {
-		return metadata;
-	}
 
 	public RelativeBlockVector[] getEntrances() {
 		return entrances;
@@ -214,17 +193,9 @@ public class Gate {
 	public int getPortalBlockOpen() {
 		return portalBlockOpen;
 	}
-	
-	public void setPortalBlockOpen(int type) {
-		portalBlockOpen = type;
-	}
 
 	public int getPortalBlockClosed() {
 		return portalBlockClosed;
-	}
-	
-	public void setPortalBlockClosed(int type) {
-		portalBlockClosed = type;
 	}
 	
 	public int getUseCost() {
@@ -245,38 +216,19 @@ public class Gate {
 	public Boolean getToOwner() {
 		return toOwner;
 	}
-	
-	public boolean matches(Blox topleft, int modX, int modZ) {
-		return matches(topleft, modX, modZ, false);
+
+	public boolean matches(Block topleft, int modX, int modZ) {
+		return matches(new Blox(topleft), modX, modZ);
 	}
 
-	public boolean matches(Blox topleft, int modX, int modZ, boolean onCreate) {
+	public boolean matches(Blox topleft, int modX, int modZ) {
 		for (int y = 0; y < layout.length; y++) {
 			for (int x = 0; x < layout[y].length; x++) {
 				int id = types.get(layout[y][x]);
 
 				if (id == ENTRANCE || id == EXIT) {
-					// TODO: Remove once snowmanTrailEvent is added
-					if (Stargate.ignoreEntrance) continue;
-					
 					int type = topleft.modRelative(x, y, 0, modX, 1, modZ).getType();
-					
-					// Ignore entrance if it's air and we're creating a new gate
-					if (onCreate && type == Material.AIR.getId()) continue;
-					
 					if (type != portalBlockClosed && type != portalBlockOpen) {
-						// Special case for water gates
-						if (portalBlockOpen == Material.WATER.getId() || portalBlockOpen == Material.STATIONARY_WATER.getId()) {
-							if (type == Material.WATER.getId() || type == Material.STATIONARY_WATER.getId()) {
-								continue;
-							}
-						}
-						// Special case for lava gates
-						if (portalBlockOpen == Material.LAVA.getId() || portalBlockOpen == Material.STATIONARY_LAVA.getId()) {
-							if (type == Material.LAVA.getId() || type == Material.STATIONARY_LAVA.getId()) {
-								continue;
-							}
-						}
 						Stargate.debug("Gate::Matches", "Entrance/Exit Material Mismatch: " + type);
 						return false;
 					}
@@ -297,7 +249,7 @@ public class Gate {
 		return true;
 	}
 
-	public static void registerGate(Gate gate) {
+	private static void registerGate(Gate gate) {
 		gates.put(gate.getFilename(), gate);
 
 		int blockID = gate.getControlBlock();
@@ -309,14 +261,13 @@ public class Gate {
 		controlBlocks.get(blockID).add(gate);
 	}
 
-	public static Gate loadGate(File file) {
+	private static Gate loadGate(File file) {
 		Scanner scanner = null;
 		boolean designing = false;
 		ArrayList<ArrayList<Character>> design = new ArrayList<ArrayList<Character>>();
 		HashMap<Character, Integer> types = new HashMap<Character, Integer>();
 		HashMap<Character, Integer> metadata = new HashMap<Character, Integer>();
 		HashMap<String, String> config = new HashMap<String, String>();
-		HashSet<Integer> frameTypes = new HashSet<Integer>();
 		int cols = 0;
 		
 		// Init types map
@@ -366,7 +317,7 @@ public class Gate {
 							Integer id = Integer.parseInt(value);
 
 							types.put(symbol, id);
-							frameTypes.add(id);
+							frameBlocks.add(id);
 						} else {
 							config.put(key, value);
 						}
@@ -409,13 +360,10 @@ public class Gate {
 		if (gate.getControls().length != 2) {
 			Stargate.log.log(Level.SEVERE, "Could not load Gate " + file.getName() + " - Gates must have exactly 2 control points.");
 			return null;
+		} else {
+			gate.save(file.getParent() + "/"); // Updates format for version changes
+			return gate;
 		}
-		
-		// Merge frame types, add open mat to list
-		frameBlocks.addAll(frameTypes);
-		
-		gate.save(file.getParent() + "/"); // Updates format for version changes
-		return gate;
 	}
 
 	private static int readConfig(HashMap<String, String> config, Gate gate, File file, String key, int def) {

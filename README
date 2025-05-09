@@ -1,9 +1,4 @@
 =============
-   Updates
-=============
-Please visit http://forum.thedgtl.net for all updates and support!
-
-=============
  Description
 =============
 This is a port of the Stargate plugin from hMod by Dinnerbone.
@@ -15,9 +10,9 @@ iConomy support added back in, only costs are create, destroy and use.
  Permissions
 =============
 stargate.use -- Allow use of all gates linking to any world in any network (Override ALL network/world permissions. Set to false to use network/world specific permissions)
-  stargate.world -- Allow use of gates linking to any world
+  stargate.world -- Allow use of gates linking to any world (For Permissions 2.x/3.x please use stargate.world.*)
     stargate.world.{world} -- Allow use of gates with a destination in {world}. Set to false to disallow use.
-  stargate.network -- Allow use of gates on all networks
+  stargate.network -- Allow use of gates on all networks (For Permissions 2.x/3.x please use stargate.network.*)
     stargate.network.{network} -- Allow use of all gates in {network}. Set to false to disallow use.
 
 stargate.option -- Allow use of all options
@@ -27,19 +22,17 @@ stargate.option -- Allow use of all options
   stargate.option.free -- Allow use of 'F'ree
   stargate.option.backwards -- Allow use of 'B'ackwards
   stargate.option.show -- Allow use of 'S'how
-  stargate.option.nonetwork -- Allow use of 'N'oNetwork
-  stargate.option.random -- Allow use of 'Random' gates
   
 stargate.create -- Allow creating gates on any network (Override all create permissions)
   stargate.create.personal -- Allow creating gates on network {playername}
-  stargate.create.network -- Allow creating gates on any network
+  stargate.create.network -- Allow creating gates on any network (For Permissions 2.x/3.x please use stargate.create.network.*)
     stargate.create.network.{networkname} -- Allow creating gates on network {networkname}. Set to false to disallow creation on {networkname}
-  stargate.create.gate -- Allow creation of any gate layout
+  stargate.create.gate -- Allow creation of any gate layout (For Permissions 2.x/3.x please use stargate.create.gate.*)
     stargate.create.gate.{gatefile} -- Allow creation of only {gatefile} gates
 
 stargate.destroy -- Allow destruction gates on any network (Orderride all destroy permissions)
   stargate.destroy.personal -- Allow destruction of gates owned by user only
-  stargate.destroy.network -- Allow destruction of gates on any network
+  stargate.destroy.network -- Allow destruction of gates on any network (For Permissions 2.x/3.x please use stargate.destroy.network.*)
     stargate.destroy.network.{networkname} -- Allow destruction of gates on network {networkname}. Set to false to disallow destruction of {networkname}
 
 stargate.free -- Allow free use/creation/destruction of gates
@@ -50,7 +43,6 @@ stargate.free -- Allow free use/creation/destruction of gates
 stargate.admin -- Allow all admin features (Hidden/Private only so far)
   stargate.admin.private -- Allow use of Private gates not owned by user
   stargate.admin.hidden -- Allow access to Hidden gates not ownerd by user
-  stargate.admin.reload -- Allow use of /sg reload
 
 =============
 Default Permissions
@@ -83,8 +75,6 @@ Sign Layout:
  			'F' for a free gate
  			'B' is for a backwards facing gate (You will exit the back)
  			'S' is for showing an always-on gate in the network list
- 			'N' is for hiding the network name
- 			'R' is for random gates. These follow standard permissions of gates, but have a random exit location every time a player enters.
 
 Options:
 The options are the single letter, not the word. So to make a private hidden gate, your 4th line would be 'PH'.
@@ -159,12 +149,6 @@ freegatesgreen - Enable to make gates that won't cost the player money show up a
 toowner - Whether the money from gate-use goes to the owner or nobody
 maxgates - If non-zero, will define the maximum amount of gates allowed on any network.
 lang - The language to use (Included languages: en, de)
-destMemory - Whether to set the first destination as the last used destination for all gates
-ignoreEntrance - Set this option to true to not check the entrance of a gate on startup. This is a workaround for snowmen breaking gates.
-handleVehicles - Whether or not to handle vehicles going through gates. Set to false to disallow vehicles (Manned or not) going through gates.
-sortLists - If true, network lists will be sorted alphabetically.
-protectEntrance - If true, will protect from users breaking gate entrance blocks (This is more resource intensive than the usual check, and should only be enabled for servers that use solid open/close blocks)
-signColor: This allows you to specify the color of the gate signs. Valid colors:
 
 debug - Whether to show massive debug output
 permdebug - Whether to show massive permission debug output
@@ -205,168 +189,8 @@ createWorldDeny=You do not have access to that world
 createConflict=Gate conflicts with existing gate
 
 =============
- Known Bugs
-=============
-Unable to reproduce: Stargates teleport a user into the ground/under the ground
-Bukkit Issue: Stargate will randomly NPE when drawing a sign. Long-standing Bukkit
-              issue, that they just made worse by disallowing me to override the
-              sign class. This won't actually affect Stargate use.
-
-=============
   Changes
 =============
-[Version 0.7.9.10]
- - Fix personal gate permission check for players with mixed-case names
-[Version 0.7.9.9]
- - Remove "Permissions" support, we now only support SuperPerms handlers.
-[Version 0.7.9.8]
- - Make sure buttons stay where they should
-[Version 0.7.9.7]
- - Do the Bungee check after the gate layout check.
-[Version 0.7.9.6]
- - Actually remove the player from the BungeeQueue when they connect. Oops :)
- - Implement stargate.server nodes
- - Improve the use of negation. You can now negate networks/worlds/servers while using stargate.use permissions.
-[Version 0.7.9.5]
- - Fixed an issue with portal material not showing up (Oh, that code WAS useful)
-[Version 0.7.9.4]
- - Fixed an issue where water gates broke, oops
-[Version 0.7.9.3]
- - Update BungeeCord integration for b152+
-[Version 0.7.9.2]
- - Remove my custom sign class. Stupid Bukkit team.
- - Will work with CB 1.4.5 builds, but now will break randomly due to Bukkit screwup
- - Update MetricsLite to R6
-[Version 0.7.9.1]
- - Optimize gate lookup in onPlayerMove
- - Resolve issue where Stargates would teleport players to the nether
-[Version 0.7.9.0]
- - Added BungeeCord multi-server support (Requires Stargate-Bungee for BungeeCord)
- - Updated Spanish language file
- - Added basic plugin metrics via http://mcstats.org/
- - Resolve issue where language updating overwrote custom strings
-[Version 0.7.8.1]
- - Resolve issue of language file being overwritten as ANSI instead of UTF8
-[Version 0.7.8.0]
- - Updated languages to include sign text (Please update any languages you are able!)
- - Resolved NPE due to Bukkit bug with signs
- - Resolved issue regarding new getTargetBlock code throwing an exception
- - Languages now auto-update based on the .JAR version (New entries only, doesn't overwrite customization)
- - New command "/sg about", will list the author of the current language file if available 
- - Language now has a fallback to English for missing lines (It's the only language I can personally update on release)
- - Added Spanish (Thanks Manuestaire) and Hungarian (Thanks HPoltergeist)
- - Added portal.setOwner(String) API
-[Version 0.7.7.5]
- - Resolve issue of right clicking introduced in 1.3.1/2
-[Version 0.7.7.4]
- - Removed try/catch, it was still segfaulting. 
- - Built against 1.3.1
-[Version 0.7.7.3]
- - Wrap sign changing in try/catch. Stupid Bukkit
-[Version 0.7.7.2]
- - Load chunk before trying to draw signs
- - Implement a workaround for BUKKIT-1033
-[Version 0.7.7.1]
- - Permission checking for 'R'andom gates.
- - Random now implies AlwaysOn
- - Added all languages to JAR
-[Version 0.7.7.0]
- - Added 'R'andom option - This still follows the permission rules defined for normal gate usage
- - Added a bit more debug output
-[Version 0.7.6.8]
- - Hopefully fix backwards gate exiting
-[Version 0.7.6.7]
- - Reload all gates on world unload, this stops gates with invalid destinations being in memory.
-[Version 0.7.6.6]
- - Check move/portal/interact/signchange events for cancellation
-[Version 0.7.6.5]
- - Resolve issue with buttons on glass gates falling off
- - /sg reload can now be used ingame (stargate.admin.reload permission)
-[Version 0.7.6.4]
- - Move blockBreak to HIGHEST priority, this resolves issues with region protection plugins
-[Version 0.7.6.3]
- - Fixed issue with displaying iConomy prices
- - iConomy is now hooked on "sg reload" if not already hooked and enabled
- - iConomy is now unhooked on "sg reload" if hooked and disabled
-[Version 0.7.6.2]
- - Button now activates if gate is opened, allowing redstone interaction
- - Fixed issue with sign line lengths. All sign text should now fit with color codes.
-[Version 0.7.6.1]
- - Update API for StargateCommand
- - Resolved issue with block data on explosion
- - Added signColor option
- - Added protectEntrance option
-[Version 0.7.6]
- - Moved gate opening/closing to a Queue/Runnable system to resolve server lag issues with very large gates
-[Version 0.7.5.11]
- - PEX now returns accurate results without requiring use of the bridge.
-[Version 0.7.5.10]
- - Added sortLists options
-[Version 0.7.5.9]
- - Quick event fix for latest dev builds
- - Fix for sign ClassCastException
-[Version 0.7.5.8]
- - Fixed an exploit with pistons to destroy gates
-[Version 0.7.5.7]
- - Removed SignPost class
- - Resolved issues with signs in 1.2
-[Version 0.7.5.6]
- - Quick update to the custom event code, works with R5+ now.
-[Version 0.7.5.5]
- - PEX is built of fail, if we have it, use bridge instead.
-[Version 0.7.5.4]
- - Fix issue with private gates for players with long names
-[Version 0.7.5.3]
- - Added another check for Perm bridges.
-[Version 0.7.5.2]
- - Make sure our timer is stopped on disable
- - Move Event reg before loading gates to stop portal material vanishing
-[Version 0.7.5.1]
- - Don't create button on failed creation
-[Version 0.7.5.0]
- - Refactored creation code a bit
- - Added StargateCreateEvent, see Stargate-API for usage.
- - Added StargateDestroyEvent, see Stargate-API for usage.
- - Updated Event API to the new standard, please see: http://wiki.bukkit.org/Introduction_to_the_New_Event_System
- - Added handleVehicles option.
- - Added 'N'o Network option (Hides the network from the sign)
-[Version 0.7.4.4]
- - Changed the implementation of StargateAccessEvent.
- - Disable Permissions if version is 2.7.2 (Common version used between bridges)
- - Fix long-standing bug with hasPermDeep check. Oops.
-[Version 0.7.4.3]
- - Implement StargateAccessEvent, used for bypassing permission checks/denying access to gates.
-[Version 0.7.4.2]
- - stargate.create.personal permission now also allows user to use personal gates
-[Version 0.7.4.1]
- - Quick API update to add player to the activate event
-[Version 0.7.4.0]
- - Fixed issue with non-air closed portal blocks
- - Added StargatePortalEvent/onStargatePortal event
-[Version 0.7.3.3]
- - Added "ignoreEntrance" option to not check entrance to gate on integrity check (Workaround for snowmen until event is pulled)
-[Version 0.7.3.2]
- - Actually fixed "><" issue with destMemory
-[Version 0.7.3.1]
- - Hopefully fixed "><" issue with destMemory
-[Version 0.7.3]
- - Lava and water gates no longer destroy on reload
- - "sg reload" now closes gates before reloading
- - Added Vault support
- - Added missing "useiConomy" option in config
-[Version 0.7.2.1]
- - Quick fix for an NPE
-[Version 0.7.2]
- - Make it so you can still destroy gates in Survival mode
-[Version 0.7.1]
- - Added destMemory option
- - Switched to sign.update() as Bukkit implemented my fix
- - Threw in a catch for a null from location for portal events
-[Version 0.7.0]
- - Minecraft 1.0.0 support
- - New FileConfiguration implemented
- - Stop gates being destroyed on right-click in Creative mode
- - Fixed signs not updating with a hackish workaround until Bukkit is fixed
 [Version 0.6.10]
  - Added Register support as opposed to iConomy
 [Version 0.6.9]

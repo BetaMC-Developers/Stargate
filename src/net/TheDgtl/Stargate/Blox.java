@@ -1,28 +1,14 @@
 package net.TheDgtl.Stargate;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
 /**
- * Stargate - A portal plugin for Bukkit
- * Copyright (C) 2011 Shaun (sturmeh)
- * Copyright (C) 2011 Dinnerbone
- * Copyright (C) 2011, 2012 Steven "Drakia" Scott <Contact@TheDgtl.net>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Blox.java
+ * @author Shaun (sturmeh)
+ * @author Dinnerbone
+ * @author Steven "Drakia" Scott
  */
 
 public class Blox {
@@ -30,7 +16,6 @@ public class Blox {
 	private int y;
 	private int z;
 	private World world;
-	private Blox parent = null;
 
 	public Blox (World world, int x, int y, int z) {
 		this.x = x;
@@ -111,35 +96,6 @@ public class Blox {
 	
 	public World getWorld() {
 		return world;
-	}
-	
-	public Block getParent() {
-		if (parent == null) findParent();
-		if (parent == null) return null;
-		return parent.getBlock();
-	}
-	
-	private void findParent() {
-		int offsetX = 0;
-		int offsetY = 0;
-		int offsetZ = 0;
-		
-		if (getBlock().getType() == Material.WALL_SIGN) {
-			if (getData() == 0x2) {
-				offsetZ = 1;
-			} else if (getData() == 0x3) {
-				offsetZ = -1;
-			} else if (getData() == 0x4) {
-				offsetX = 1;
-			} else if (getData() == 0x5) {
-				offsetX = -1;
-			}
-		} else if (getBlock().getType() == Material.SIGN_POST) {
-			offsetY = -1;
-		} else {
-			return;
-		}
-		parent = new Blox(world, getX() + offsetX, getY() + offsetY, getZ() + offsetZ);
 	}
 	
 	public String toString() {
